@@ -1,11 +1,13 @@
 import React, {useState, useEffect, useId} from 'react';
-import {View, Image, StyleSheet,Text,SafeAreaView,TextInput,TouchableOpacity,Platform} from 'react-native';
+import {View, Dimensions,Image, StyleSheet,Text,SafeAreaView,TextInput,TouchableOpacity,Platform} from 'react-native';
 import { useSelector, useDispatch } from "react-redux";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {LoginProps} from '../interface/user';
 import { NavigationContainer, useRoute,useNavigation } from "@react-navigation/native";
 import { connect,ConnectedProps  } from 'react-redux';
 import { createStore } from 'redux'
+const width = Dimensions.get('window').width;
+const height= Dimensions.get('window').height;
 
 const connector = connect(mapStateToProps,mapDispatchToProps)
 
@@ -105,7 +107,7 @@ const Auth = (props: Props) => {
           const alg = await acct.json();
           console.log(alg.id);
           if(alg.id != ""){
-            console.log(  props.updateState);
+            console.log(  "acct",acct);
             
           
             props.updateState({target: 'loggedIn',value:true})
@@ -139,7 +141,7 @@ const Auth = (props: Props) => {
           <Image style={styles.img} source={{uri: imageURl}} />
           </View>
           <View style={styles.mainView}>
-            <View style={{backgroundColor:'pink'}}>
+            <View >
             
             <TextInput
               onChangeText={text => onChangeUsername(text)}
@@ -157,12 +159,12 @@ const Auth = (props: Props) => {
           
           </View>
           <View style={{ flex:2,  justifyContent: 'center',
-      alignItems: 'center'}} >
+      alignItems: 'center',margin:10,width:width,}} >
           
             <TouchableOpacity onPress={ onLogin} style={{
-                height: 50,
+                height: 50,alignItems:'center',justifyContent:'center',
                 backgroundColor:'green', padding:10,
-                borderRadius: 10}}>
+                borderRadius: 10,width:width/2}}>
                        <Text>LOGIN</Text>
                       </TouchableOpacity>
                       </View>
@@ -178,15 +180,16 @@ containerView: {
   flexDirection:'column'
 },
 mainView: {
-  flex: 9,
+  flex: 4,
   justifyContent: 'center',
-  
- 
+  backgroundColor:'white',
+  borderTopRightRadius:25,
+  borderTopLeftRadius:25
 },
 img: {
 
-        width: 150,
-        height: 300,
+        width: width,
+        height: height-200,
   
 },
 title: {

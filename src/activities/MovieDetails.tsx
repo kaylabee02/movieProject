@@ -163,26 +163,14 @@ return date.getFullYear();
   
 }
 async function rateMovie(){
-  console.log(route.params.account_id);
-  await fetch("https://api.themoviedb.org/3/account/"+props.account_id+"/watchlist?api_key=a5732c67a291e8645cab8e851a3095d9&session_id="+props.session_id, {
-         method: 'POST',
-        headers: {
-                 Accept: 'application/json',
-                 'Content-Type': 'application/json'
-        },
-       body: JSON.stringify({
-        "media_type": "movie",
-      "media_id": 11,
-      "watchlist": true})
-       }).then((response) => response.json())
-       .then((responseJson) => {
-          if(responseJson.success== true){
-            console.log(responseJson.status_message);
-            
-          }
-          
-       
-      });
+  console.log(props.account_id);
+  const log=await    fetch('https://api.themoviedb.org/3/account/krbeldad/watchlist/movies?api_key=a5732c67a291e8645cab8e851a3095d9&language=en-US&sort_by=created_at.asc&page=1', {
+      method: 'GET',
+     
+    
+     });
+     console.log(await log);
+     
             
 }
 return (

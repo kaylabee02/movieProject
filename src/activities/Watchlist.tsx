@@ -25,6 +25,7 @@ type Props = PropsFromRedux & {
   useEffect(() => {
 
     async function fetchData() {
+      ///3/account/get-movie-watchlist
       const apiResponse = await fetch("https://api.themoviedb.org/3/account/watchlist/movies?api_key=a5732c67a291e8645cab8e851a3095d9");
       const json = await apiResponse.json();
       console.log(json);
