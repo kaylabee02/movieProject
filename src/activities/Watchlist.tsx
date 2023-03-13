@@ -21,21 +21,84 @@ type Props = PropsFromRedux & {
   const [JSON_DATA, setJSON_DATA] = useState('');
  
   const [showIndicator, setShowIndicator] = useState(true);
- 
+  const [lines, SETLINES] = useState(5);
+  const [textLenth, SETLENTH] = useState('');
   useEffect(() => {
 
     async function fetchData() {
-      ///3/account/get-movie-watchlist
-      const apiResponse = await fetch("https://api.themoviedb.org/3/account/watchlist/movies?api_key=a5732c67a291e8645cab8e851a3095d9");
+      const apiResponse = await fetch("https://api.themoviedb.org/3/account/1/watchlist/movies?sort_by=created_at.desc&api_key=a5732c67a291e8645cab8e851a3095d9&session_id="+props.session_id);
       const json = await apiResponse.json();
-      console.log(json);
+      console.log(json.results);
+      
+    //   let dataRev = Object.values(json_reviews.results)
+    // for (let index = 0; index < dataRev.length; index++) {
+    //   const element = dataRev[index].author_details;
+      setJSON_DATA(json.results);
+      setShowIndicator(false);
+    // }
+      
       
     }
     fetchData();
  
   }, []);
-   
+  let watch = Object.values(JSON_DATA)
+  console.log(watch.length);
+  let mapReview = watch.map(item =>{
+    
+  return (
+    <View style={{ flex:0,flexDirection:'row',backgroundColor:'#d1dbe4',
+     marginTop:15,height:height/4,borderTopRightRadius:30,borderBottomLeftRadius:30,
+     borderTopLeftRadius:5,borderBottomRightRadius:5,alignItems:'center'}}>
+      <View style={{margin:10,flex:1.3}}>
+         <Image style={styleSheet.tinyLogo}
+           source={{
+             uri: 'https://image.tmdb.org/t/p/original'+item.poster_path,
+           }}/> 
+      </View>
+      <View style={{flexDirection:'column',flex:2, margin:10,alignSelf:'flex-start',marginTop:25}}>
+          <Text style={{fontSize:20, color:'black',marginLeft:10,fontWeight:'bold'}}>{item.title}</Text>
+          <Text style={styleSheet.itemText}> {convertValue(item.vote_average)}% </Text>
+          <Text style={styleSheet.itemText1}
+            numberOfLines={lines}
+            onPress={() =>handleSeeMore()}
+            ellipsizeMode="middle"
+            
+              >{item.overview}</Text>
+              <Text
+                 style={{color:'black',fontStyle:'italic',fontWeight:'800', textDecorationLine:'underline'}}
+                onPress={() =>SETLINES(0)}>
+                    see more
+         </Text>
+          
+          
+      </View>
+      <View style={{flex:0.9}}>
+      <TouchableOpacity >
+                      <Image style={{width:50,height:50,}}
+                      source={require('../assets/imgs/rate2.png')}
+                        />
+                  </TouchableOpacity>
+      </View>
+    </View>
+   )
+    
+  });
  
+  function convertValue (num){
+    var discount = num.toFixed(1);
+    var str_rating = discount.toString();
+    var rating = str_rating.replace(".", "");
+  
+    return rating;
+    
+  }
+  function handleSeeMore(){
+    textLenth
+    ? SETLINES(0)
+    : SETLINES(5);
+  }
+   
   return (
     <SafeAreaView style={styleSheet.MainContainer}>
  
@@ -44,9 +107,10 @@ type Props = PropsFromRedux & {
         color="red"
         animating={showIndicator}
         style={styleSheet.activityIndicator} />
-      
-     
- 
+
+      <View style={{flex:1}}>
+         {mapReview}
+      </View>
     </SafeAreaView>
   );
 }
@@ -74,16 +138,16 @@ const styleSheet = StyleSheet.create({
   itemText: {
     fontSize: 18,
     color: 'black',
-   
+    marginLeft:10
   },
  
   itemText1: {
-    fontSize: 18,
+    fontSize: 15,
     color: 'black',
-    width: 100,
+    width: 210,
     flexGrow: 1,
     flex: 1,
-    margin:10
+    marginLeft:10
   },
   activityIndicator: {
     position: 'absolute',
@@ -95,8 +159,8 @@ const styleSheet = StyleSheet.create({
     bottom: 0,
   },  
   tinyLogo: {
-    width: width/3,
-    height: height/4,
+    width: width/4,
+    height: height/8,
     borderRadius:15
   },
  
