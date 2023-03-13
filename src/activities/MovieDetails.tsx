@@ -9,7 +9,15 @@ import { LoginProps } from '../interface/user';
 const width = Dimensions.get('window').width;
 const height= Dimensions.get('window').height;
 
-const MovieDetails = () => {
+import { connect,ConnectedProps } from 'react-redux';
+const connector = connect(mapStateToProps,mapDispatchToProps)
+
+type PropsFromRedux = ConnectedProps<typeof connector>
+
+type Props = PropsFromRedux & {
+  backgroundColor: string
+}
+const MovieDetails = (props: Props) => {
   const route = useRoute();
   const nav = useNavigation();
   
@@ -156,7 +164,7 @@ return date.getFullYear();
 }
 async function rateMovie(){
   console.log(route.params.account_id);
-  await fetch("https://api.themoviedb.org/3/account/"+route.params.id+"/watchlist?api_key=a5732c67a291e8645cab8e851a3095d9&session_id="+route.params.session_id, {
+  await fetch("https://api.themoviedb.org/3/account/"+props.account_id+"/watchlist?api_key=a5732c67a291e8645cab8e851a3095d9&session_id="+props.session_id, {
          method: 'POST',
         headers: {
                  Accept: 'application/json',
@@ -314,4 +322,27 @@ tinyLogo: {
 
 });
 
-export default MovieDetails;
+const mapStateToProps = states => {
+  return {
+    session_id: states.reducer.session_id,
+    api_token:states.reducer.api_token,
+    request_token:states.reducer.request_token,
+    account_id:states.reducer.account_id,
+      loggedIn: states.reducer.loggedIn,
+      
+  }
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    updateState: (payload) => dispatch({
+      type: 'UPDATE_STATE',
+      payload: payload
+    })
+  }
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(MovieDetails);

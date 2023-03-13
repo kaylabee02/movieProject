@@ -66,14 +66,18 @@ const MainStackNavigator = (props:Props) => {
       </Stack.Navigator>
     );
   };
-const App=()=> {
+const App=(props:Props)=> {
   
   return (
     <NavigationContainer>
       
-       {/* {false ? <MyTabs /> :  */}
-       <MainStackNavigator /> 
-       
+      <Stack.Navigator screenOptions={{
+        headerShown: false,
+      }} initialRouteName={props.loggedIn == false ? 'Auth' : 'Homey'}>
+        <Stack.Screen name="Auth" component={Auth}  />
+        <Stack.Screen name="Homey" component={MyTabs} />
+        <Stack.Screen name="Details" component={Details}   />
+      </Stack.Navigator>
         
       
     </NavigationContainer>
@@ -87,7 +91,7 @@ const mapStateToProps = states => {
     api_token:states.reducer.api_token,
     request_token:states.reducer.request_token,
     account_id:states.reducer.account_id,
-      loggedIn: states.reducer.loggedIn
+    loggedIn: states.reducer.loggedIn
 	}
 }
 function mapDispatchToProps(dispatch) {

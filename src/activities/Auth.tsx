@@ -107,7 +107,7 @@ const Auth = (props: Props) => {
           if(alg.id != ""){
             console.log(  props.updateState);
             
-            // store.dispatch({ type: 'updateState', payload: {loggedIn:false}})
+          
             props.updateState({target: 'loggedIn',value:true})
             props.updateState({target:"request_token",value:request_token})
             props.updateState({target:"api_token",value:api_key})

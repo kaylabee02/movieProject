@@ -17,7 +17,7 @@ const height= Dimensions.get('window').height;
  const  Home =(props: Props) =>{
   const route = useRoute();
   const navigation = useNavigation();
-  console.log("HAHAH",props.request_token);
+  console.log("HAHAH",props);
   
   const [JSON_DATA, setJSON_DATA] = useState('');
  
@@ -45,19 +45,22 @@ const height= Dimensions.get('window').height;
 
     
     <View style={styleSheet.listItem}>
-      <TouchableOpacity onPress={()=>toView(item.id)} >
-      <Image
-       style={styleSheet.tinyLogo}
-        source={{
-          uri: 'https://image.tmdb.org/t/p/original'+item.poster_path,
-        }}
-        
-      /> 
-      </TouchableOpacity>
-      
-      <Text style={styleSheet.itemText1} numberOfLines={2}> {item.title} </Text>
-      <Text style={styleSheet.itemText}> {convertValue(item.vote_average)}% </Text>
-      <Text style={styleSheet.itemText}> {item.release_date} </Text>
+      <View >
+        <TouchableOpacity onPress={()=>toView(item.id)} >
+        <Image
+        style={styleSheet.tinyLogo}
+          source={{
+            uri: 'https://image.tmdb.org/t/p/original'+item.poster_path,
+          }}
+          
+        /> 
+        </TouchableOpacity>
+      </View>
+      <View style={{backgroundColor:'#BFDCE5',height:100,borderBottomLeftRadius:15, borderBottomRightRadius:15,alignItems:'center'}}>
+        <Text style={styleSheet.itemText1} numberOfLines={2}> {item.title} </Text>
+        <Text style={styleSheet.itemText}> {convertValue(item.vote_average)}% </Text>
+        <Text style={styleSheet.itemText}> {item.release_date} </Text>
+      </View>
     </View>
     
   );
@@ -66,8 +69,7 @@ const height= Dimensions.get('window').height;
     navigation.navigate("Details",{
       title:'PLEASE',
       id: id,
-      account_id:props.route.params.account_id,
-      session_id:props.route.params.session_id
+      
     });
 
   }
@@ -104,7 +106,7 @@ function convertValue (num){
         color="red"
         animating={showIndicator}
         style={styleSheet.activityIndicator} />
-      <View style={{justifyContent:'center',alignSelf:'center'}}>
+      <View style={{flex:1,alignItems:'center'}}>
       <FlatList
         data={JSON_DATA}
         renderItem={ItemRender}
@@ -124,27 +126,25 @@ function convertValue (num){
 const styleSheet = StyleSheet.create({
   MainContainer: {
     flex: 1,
-    margin:20,
+    // margin:20,
     // width:width,
     // padding:10,
    
   },
  
   listItem: {
-    justifyContent:'space-between',
-    flexDirection:'column',
-    alignContent:'space-between',
-   alignItems:'center',
-  margin:10,
-  padding:20
     
+  margin:20,
+  padding:10,
+  height:'50%'
    
   },
  
   itemText: {
     fontSize: 18,
     color: 'black',
-   
+   textAlign:'center',
+   marginBottom:2
   },
  
   itemText1: {
@@ -153,7 +153,8 @@ const styleSheet = StyleSheet.create({
     width: 100,
     flexGrow: 1,
     flex: 1,
-    margin:10
+    margin:10,
+    textAlign:'center'
   },
   activityIndicator: {
     position: 'absolute',
@@ -167,7 +168,9 @@ const styleSheet = StyleSheet.create({
   tinyLogo: {
     width: width/3,
     height: height/4,
-    borderRadius:15
+    borderTopRightRadius:15,
+    borderTopLeftRadius:15
+
   },
  
 });
@@ -178,7 +181,8 @@ const mapStateToProps = states => {
     api_token:states.reducer.api_token,
     request_token:states.reducer.request_token,
     account_id:states.reducer.account_id,
-      loggedIn: states.reducer.loggedIn
+      loggedIn: states.reducer.loggedIn,
+      
   }
 }
 
